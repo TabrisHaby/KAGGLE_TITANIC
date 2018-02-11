@@ -6,7 +6,7 @@ Titanic Data from Kaggle
 Version 3
 from https://www.kaggle.com/ldfreeman3/a-data-science-framework-to-achieve-99-accuracy
 
-@author: adien
+@author: https://www.kaggle.com/ldfreeman3/a-data-science-framework-to-achieve-99-accuracy
 """
 
 #%%
@@ -27,11 +27,11 @@ import numpy as np #foundational package for scientific computing
 print("NumPy version: {}". format(np.__version__))
 
 import scipy as sp #collection of functions for scientific computing and advance mathematics
-print("SciPy version: {}". format(sp.__version__)) 
+print("SciPy version: {}". format(sp.__version__))
 
 import IPython
 from IPython import display #pretty printing of dataframes in Jupyter notebook
-print("IPython version: {}". format(IPython.__version__)) 
+print("IPython version: {}". format(IPython.__version__))
 
 import sklearn #collection of machine learning algorithms
 print("scikit-learn version: {}". format(sklearn.__version__))
@@ -74,37 +74,37 @@ pylab.rcParams['figure.figsize'] = 12,8
 
 #%%
 # Notice
-The Survived variable is our outcome or dependent variable. 
-It is a binary nominal datatype of 1 for survived and 0 for did not survive. 
+The Survived variable is our outcome or dependent variable.
+It is a binary nominal datatype of 1 for survived and 0 for did not survive.
 All other variables are potential predictor or independent variables.
-It's important to note, more predictor variables do not make a better model, 
+It's important to note, more predictor variables do not make a better model,
 but the right variables.
 
-The PassengerID and Ticket variables are assumed to be random unique identifiers, 
+The PassengerID and Ticket variables are assumed to be random unique identifiers,
 that have no impact on the outcome variable. Thus, they will be excluded from analysis.
 
-The Pclass variable is an ordinal datatype for the ticket class, 
-a proxy for socio-economic status (SES), representing 
+The Pclass variable is an ordinal datatype for the ticket class,
+a proxy for socio-economic status (SES), representing
 1 = upper class, 2 = middle class, and 3 = lower class.
 
-The Name variable is a nominal datatype. 
-It could be used in feature engineering to derive the gender from title, 
-family size from surname, and SES from titles like doctor or master. 
-Since these variables already exist, we'll make use of it to see if title, 
+The Name variable is a nominal datatype.
+It could be used in feature engineering to derive the gender from title,
+family size from surname, and SES from titles like doctor or master.
+Since these variables already exist, we'll make use of it to see if title,
 like master, makes a difference.
 
-The Sex and Embarked variables are a nominal datatype. 
+The Sex and Embarked variables are a nominal datatype.
 They will be converted to dummy variables for mathematical calculations.
 
 The Age and Fare variable are continuous quantitative datatypes.
 
-The SibSp represents number of related siblings/spouse aboard and Parch represents 
-number of related parents/children aboard. Both are discrete quantitative datatypes. 
+The SibSp represents number of related siblings/spouse aboard and Parch represents
+number of related parents/children aboard. Both are discrete quantitative datatypes.
 This can be used for feature engineering to create a family size and is alone variable.
 
-The Cabin variable is a nominal datatype that can be used in feature engineering 
+The Cabin variable is a nominal datatype that can be used in feature engineering
 for approximate position on ship when the incident occurred and SES from deck levels.
-However, since there are many null values, it does not add value and thus is 
+However, since there are many null values, it does not add value and thus is
 excluded from analysis.
 
 #%%
@@ -118,7 +118,7 @@ data1 = data_raw.copy(deep = True)
 data_cleaner = [data1, data_val]
 
 print (data_raw.info())
-data_raw.sample(10) 
+data_raw.sample(10)
 
 #%%
 print('Train columns with null values:\n', data1.isnull().sum())
@@ -131,7 +131,7 @@ data_raw.describe(include = 'all')
 
 #%%
 ###COMPLETING: complete or delete missing values in train and test/validation dataset
-for dataset in data_cleaner:    
+for dataset in data_cleaner:
     #complete missing age with median
     dataset['Age'].fillna(dataset['Age'].median(), inplace = True)
 
@@ -140,7 +140,7 @@ for dataset in data_cleaner:
 
     #complete missing fare with median
     dataset['Fare'].fillna(dataset['Fare'].median(), inplace = True)
-    
+
 #delete the cabin feature/column and others previously stated to exclude in train dataset
 drop_column = ['PassengerId','Cabin', 'Ticket']
 data1.drop(drop_column, axis=1, inplace = True)
@@ -151,7 +151,7 @@ print(data_val.isnull().sum())
 
 #%%
 ###CREATE: Feature Engineering for train and test/validation dataset
-for dataset in data_cleaner:    
+for dataset in data_cleaner:
     #Discrete variables
     dataset['FamilySize'] = dataset ['SibSp'] + dataset['Parch'] + 1
 
@@ -187,7 +187,7 @@ data1.sample(10)
 
 #%%
 label = LabelEncoder()
-for dataset in data_cleaner:    
+for dataset in data_cleaner:
     dataset['Sex_Code'] = label.fit_transform(dataset['Sex'])
     dataset['Embarked_Code'] = label.fit_transform(dataset['Embarked'])
     dataset['Title_Code'] = label.fit_transform(dataset['Title'])
@@ -258,13 +258,13 @@ for x in data1_x:
         print('Survival Correlation by:', x)
         print(data1[[x, Target[0]]].groupby(x, as_index=False).mean())
         print('-'*10, '\n')
-        
+
 #using crosstabs: https://pandas.pydata.org/pandas-docs/stable/generated/pandas.crosstab.html
 print(pd.crosstab(data1['Title'],data1[Target[0]]))
 
 #%%
 
-#IMPORTANT: Intentionally plotted different ways for learning purposes only. 
+#IMPORTANT: Intentionally plotted different ways for learning purposes only.
 
 #optional plotting w/pandas: https://pandas.pydata.org/pandas-docs/stable/visualization.html
 
@@ -293,7 +293,7 @@ plt.title('Family Size Boxplot')
 plt.ylabel('Family Size (#)')
 
 plt.subplot(234)
-plt.hist(x = [data1[data1['Survived']==1]['Fare'], data1[data1['Survived']==0]['Fare']], 
+plt.hist(x = [data1[data1['Survived']==1]['Fare'], data1[data1['Survived']==0]['Fare']],
          stacked=True, color = ['g','r'],label = ['Survived','Dead'])
 plt.title('Fare Histogram by Survival')
 plt.xlabel('Fare ($)')
@@ -301,7 +301,7 @@ plt.ylabel('# of Passengers')
 plt.legend()
 
 plt.subplot(235)
-plt.hist(x = [data1[data1['Survived']==1]['Age'], data1[data1['Survived']==0]['Age']], 
+plt.hist(x = [data1[data1['Survived']==1]['Age'], data1[data1['Survived']==0]['Age']],
          stacked=True, color = ['g','r'],label = ['Survived','Dead'])
 plt.title('Age Histogram by Survival')
 plt.xlabel('Age (Years)')
@@ -309,7 +309,7 @@ plt.ylabel('# of Passengers')
 plt.legend()
 
 plt.subplot(236)
-plt.hist(x = [data1[data1['Survived']==1]['FamilySize'], data1[data1['Survived']==0]['FamilySize']], 
+plt.hist(x = [data1[data1['Survived']==1]['FamilySize'], data1[data1['Survived']==0]['FamilySize']],
          stacked=True, color = ['g','r'],label = ['Survived','Dead'])
 plt.title('Family Size Histogram by Survival')
 plt.xlabel('Family Size (#)')
@@ -401,18 +401,18 @@ pp.set(xticklabels=[])
 def correlation_heatmap(df):
     _ , ax = plt.subplots(figsize =(14, 12))
     colormap = sns.diverging_palette(220, 10, as_cmap = True)
-    
+
     _ = sns.heatmap(
-        df.corr(), 
+        df.corr(),
         cmap = colormap,
-        square=True, 
-        cbar_kws={'shrink':.9 }, 
+        square=True,
+        cbar_kws={'shrink':.9 },
         ax=ax,
-        annot=True, 
+        annot=True,
         linewidths=0.1,vmax=1.0, linecolor='white',
         annot_kws={'fontsize':12 }
     )
-    
+
     plt.title('Pearson Correlation of Features', y=1.05, size=15)
 
 correlation_heatmap(data1)
@@ -430,37 +430,37 @@ MLA = [
 
     #Gaussian Processes
     gaussian_process.GaussianProcessClassifier(),
-    
+
     #GLM
     linear_model.LogisticRegressionCV(),
     linear_model.PassiveAggressiveClassifier(),
     linear_model.RidgeClassifierCV(),
     linear_model.SGDClassifier(),
     linear_model.Perceptron(),
-    
+
     #Navies Bayes
     naive_bayes.BernoulliNB(),
     naive_bayes.GaussianNB(),
-    
+
     #Nearest Neighbor
     neighbors.KNeighborsClassifier(),
-    
+
     #SVM
     svm.SVC(probability=True),
     svm.NuSVC(probability=True),
     svm.LinearSVC(),
-    
-    #Trees    
+
+    #Trees
     tree.DecisionTreeClassifier(),
     tree.ExtraTreeClassifier(),
-    
+
     #Discriminant Analysis
     discriminant_analysis.LinearDiscriminantAnalysis(),
     discriminant_analysis.QuadraticDiscriminantAnalysis(),
 
-    
+
     #xgboost: http://xgboost.readthedocs.io/en/latest/model.html
-    XGBClassifier()    
+    XGBClassifier()
     ]
 
 #split dataset in cross-validation with this splitter class: http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.ShuffleSplit.html#sklearn.model_selection.ShuffleSplit
@@ -482,24 +482,24 @@ for alg in MLA:
     MLA_name = alg.__class__.__name__
     MLA_compare.loc[row_index, 'MLA Name'] = MLA_name
     MLA_compare.loc[row_index, 'MLA Parameters'] = str(alg.get_params())
-    
+
     #score model with cross validation: http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_validate.html#sklearn.model_selection.cross_validate
     cv_results = model_selection.cross_validate(alg, data1[data1_x_bin], data1[Target], cv  = cv_split)
 
     MLA_compare.loc[row_index, 'MLA Time'] = cv_results['fit_time'].mean()
     MLA_compare.loc[row_index, 'MLA Train Accuracy Mean'] = cv_results['train_score'].mean()
-    MLA_compare.loc[row_index, 'MLA Test Accuracy Mean'] = cv_results['test_score'].mean()   
+    MLA_compare.loc[row_index, 'MLA Test Accuracy Mean'] = cv_results['test_score'].mean()
     #if this is a non-bias random sample, then +/-3 standard deviations (std) from the mean, should statistically capture 99.7% of the subsets
     MLA_compare.loc[row_index, 'MLA Test Accuracy 3*STD'] = cv_results['test_score'].std()*3   #let's know the worst that can happen!
-    
+
 
     #save MLA predictions - see section 6 for usage
     alg.fit(data1[data1_x_bin], data1[Target])
     MLA_predict[MLA_name] = alg.predict(data1[data1_x_bin])
-    
+
     row_index+=1
 
-    
+
 #print and sort table: https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.sort_values.html
 MLA_compare.sort_values(by = ['MLA Test Accuracy Mean'], ascending = False, inplace = True)
 MLA_compare
@@ -523,7 +523,7 @@ base_results = model_selection.cross_validate(dtree, data1[data1_x_bin], data1[T
 dtree.fit(data1[data1_x_bin], data1[Target])
 
 print('BEFORE DT Parameters: ', dtree.get_params())
-print("BEFORE DT Training w/bin score mean: {:.2f}". format(base_results['train_score'].mean()*100)) 
+print("BEFORE DT Training w/bin score mean: {:.2f}". format(base_results['train_score'].mean()*100))
 print("BEFORE DT Test w/bin score mean: {:.2f}". format(base_results['test_score'].mean()*100))
 print("BEFORE DT Test w/bin score 3*std: +/- {:.2f}". format(base_results['test_score'].std()*100*3))
 #print("BEFORE DT Test w/bin set score min: {:.2f}". format(base_results['test_score'].min()*100))
@@ -550,7 +550,7 @@ tune_model.fit(data1[data1_x_bin], data1[Target])
 #print(tune_model.cv_results_['params'])
 print('AFTER DT Parameters: ', tune_model.best_params_)
 #print(tune_model.cv_results_['mean_train_score'])
-print("AFTER DT Training w/bin score mean: {:.2f}". format(tune_model.cv_results_['mean_train_score'][tune_model.best_index_]*100)) 
+print("AFTER DT Training w/bin score mean: {:.2f}". format(tune_model.cv_results_['mean_train_score'][tune_model.best_index_]*100))
 #print(tune_model.cv_results_['mean_test_score'])
 print("AFTER DT Test w/bin score mean: {:.2f}". format(tune_model.cv_results_['mean_test_score'][tune_model.best_index_]*100))
 print("AFTER DT Test w/bin score 3*std: +/- {:.2f}". format(tune_model.cv_results_['std_test_score'][tune_model.best_index_]*100*3))
@@ -558,10 +558,10 @@ print('-'*10)
 
 #%%
 #base model
-print('BEFORE DT RFE Training Shape Old: ', data1[data1_x_bin].shape) 
+print('BEFORE DT RFE Training Shape Old: ', data1[data1_x_bin].shape)
 print('BEFORE DT RFE Training Columns Old: ', data1[data1_x_bin].columns.values)
 
-print("BEFORE DT RFE Training w/bin score mean: {:.2f}". format(base_results['train_score'].mean()*100)) 
+print("BEFORE DT RFE Training w/bin score mean: {:.2f}". format(base_results['train_score'].mean()*100))
 print("BEFORE DT RFE Test w/bin score mean: {:.2f}". format(base_results['test_score'].mean()*100))
 print("BEFORE DT RFE Test w/bin score 3*std: +/- {:.2f}". format(base_results['test_score'].std()*100*3))
 print('-'*10)
@@ -576,10 +576,10 @@ X_rfe = data1[data1_x_bin].columns.values[dtree_rfe.get_support()]
 rfe_results = model_selection.cross_validate(dtree, data1[X_rfe], data1[Target], cv  = cv_split)
 
 #print(dtree_rfe.grid_scores_)
-print('AFTER DT RFE Training Shape New: ', data1[X_rfe].shape) 
+print('AFTER DT RFE Training Shape New: ', data1[X_rfe].shape)
 print('AFTER DT RFE Training Columns New: ', X_rfe)
 
-print("AFTER DT RFE Training w/bin score mean: {:.2f}". format(rfe_results['train_score'].mean()*100)) 
+print("AFTER DT RFE Training w/bin score mean: {:.2f}". format(rfe_results['train_score'].mean()*100))
 print("AFTER DT RFE Test w/bin score mean: {:.2f}". format(rfe_results['test_score'].mean()*100))
 print("AFTER DT RFE Test w/bin score 3*std: +/- {:.2f}". format(rfe_results['test_score'].std()*100*3))
 print('-'*10)
@@ -592,7 +592,7 @@ rfe_tune_model.fit(data1[X_rfe], data1[Target])
 #print(rfe_tune_model.cv_results_['params'])
 print('AFTER DT RFE Tuned Parameters: ', rfe_tune_model.best_params_)
 #print(rfe_tune_model.cv_results_['mean_train_score'])
-print("AFTER DT RFE Tuned Training w/bin score mean: {:.2f}". format(rfe_tune_model.cv_results_['mean_train_score'][tune_model.best_index_]*100)) 
+print("AFTER DT RFE Tuned Training w/bin score mean: {:.2f}". format(rfe_tune_model.cv_results_['mean_train_score'][tune_model.best_index_]*100))
 #print(rfe_tune_model.cv_results_['mean_test_score'])
 print("AFTER DT RFE Tuned Test w/bin score mean: {:.2f}". format(rfe_tune_model.cv_results_['mean_test_score'][tune_model.best_index_]*100))
 print("AFTER DT RFE Tuned Test w/bin score 3*std: +/- {:.2f}". format(rfe_tune_model.cv_results_['std_test_score'][tune_model.best_index_]*100*3))
@@ -600,11 +600,11 @@ print('-'*10)
 
 #%%
 #Graph MLA version of Decision Tree: http://scikit-learn.org/stable/modules/generated/sklearn.tree.export_graphviz.html
-import graphviz 
-dot_data = tree.export_graphviz(dtree, out_file=None, 
+import graphviz
+dot_data = tree.export_graphviz(dtree, out_file=None,
                                 feature_names = data1_x_bin, class_names = True,
                                 filled = True, rounded = True)
-graph = graphviz.Source(dot_data) 
+graph = graphviz.Source(dot_data)
 graph
 
 
@@ -628,20 +628,20 @@ vote_est = [
 
     #Gaussian Processes: http://scikit-learn.org/stable/modules/gaussian_process.html#gaussian-process-classification-gpc
     ('gpc', gaussian_process.GaussianProcessClassifier()),
-    
+
     #GLM: http://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
     ('lr', linear_model.LogisticRegressionCV()),
-    
+
     #Navies Bayes: http://scikit-learn.org/stable/modules/naive_bayes.html
     ('bnb', naive_bayes.BernoulliNB()),
     ('gnb', naive_bayes.GaussianNB()),
-    
+
     #Nearest Neighbor: http://scikit-learn.org/stable/modules/neighbors.html
     ('knn', neighbors.KNeighborsClassifier()),
-    
+
     #SVM: http://scikit-learn.org/stable/modules/svm.html
     ('svc', svm.SVC(probability=True)),
-    
+
     #xgboost: http://xgboost.readthedocs.io/en/latest/model.html
    ('xgb', XGBClassifier())
 
@@ -652,7 +652,7 @@ vote_hard = ensemble.VotingClassifier(estimators = vote_est , voting = 'hard')
 vote_hard_cv = model_selection.cross_validate(vote_hard, data1[data1_x_bin], data1[Target], cv  = cv_split)
 vote_hard.fit(data1[data1_x_bin], data1[Target])
 
-print("Hard Voting Training w/bin score mean: {:.2f}". format(vote_hard_cv['train_score'].mean()*100)) 
+print("Hard Voting Training w/bin score mean: {:.2f}". format(vote_hard_cv['train_score'].mean()*100))
 print("Hard Voting Test w/bin score mean: {:.2f}". format(vote_hard_cv['test_score'].mean()*100))
 print("Hard Voting Test w/bin score 3*std: +/- {:.2f}". format(vote_hard_cv['test_score'].std()*100*3))
 print('-'*10)
@@ -662,7 +662,7 @@ vote_soft = ensemble.VotingClassifier(estimators = vote_est , voting = 'soft')
 vote_soft_cv = model_selection.cross_validate(vote_soft, data1[data1_x_bin], data1[Target], cv  = cv_split)
 vote_soft.fit(data1[data1_x_bin], data1[Target])
 
-print("Soft Voting Training w/bin score mean: {:.2f}". format(vote_soft_cv['train_score'].mean()*100)) 
+print("Soft Voting Training w/bin score mean: {:.2f}". format(vote_soft_cv['train_score'].mean()*100))
 print("Soft Voting Test w/bin score mean: {:.2f}". format(vote_soft_cv['test_score'].mean()*100))
 print("Soft Voting Test w/bin score 3*std: +/- {:.2f}". format(vote_soft_cv['test_score'].std()*100*3))
 print('-'*10)

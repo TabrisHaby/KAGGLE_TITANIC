@@ -5,7 +5,7 @@ Created on Sat Feb  3 12:12:58 2018
 Titanic Data
 Code 5
 
-@author: adien
+@author: Kaggle kernel
 """
 
 #%%
@@ -102,11 +102,11 @@ def get_title(name) :
 # create new features Title
 for d in full :
     d['Title'] = d['Name'].apply(get_title)
-    
+
 # group the non-common title with Rare
 sns.countplot(x = 'Title',data = train,hue = 'Survived')
 for d in full :
-    d['Title'] = d['Title'].replace(['Lady', 'Countess','Capt', 'Col','Don', 
+    d['Title'] = d['Title'].replace(['Lady', 'Countess','Capt', 'Col','Don',
      'Dr', 'Major', 'Rev', 'Sir', 'Jonkheer', 'Dona'], 'Rare')
     d['Title'] = d['Title'].replace(['Mlle','Ms'],'Miss')
     d['Title'] = d['Title'].replace('Mme','Mrs')
@@ -161,7 +161,7 @@ for d in full :
     d['Fare'] = d['Fare'].map(fare_map).astype(int)
     # Age to 0-4
     d['Age'] = d['Age'].map(age_map).astype(int)
-    
+
 #%%
 # drop some features
 drop_e = ['PassengerId', 'Name', 'Ticket', 'Cabin', 'SibSp',
@@ -176,7 +176,7 @@ test = test.drop(drop_e,axis = 1)
 colormap = plt.cm.RdBu
 plt.figure(figsize=(14,12))
 plt.title('Pearson Correlation of Features', y=1.05, size=15)
-sns.heatmap(train.astype(float).corr(),linewidths=0.1,vmax=1.0, 
+sns.heatmap(train.astype(float).corr(),linewidths=0.1,vmax=1.0,
             square=True, cmap=colormap, linecolor='white', annot=True)
 
 # PairPlot
@@ -186,7 +186,7 @@ g.set(xticklabels = [])
 
 #%%
     # Ensembling & Stacking models
-    
+
 # Some useful parameters which will come in handy later on
 ntrain = train.shape[0]
 ntest = test.shape[0]
@@ -207,13 +207,13 @@ class SklearnHelper(object):
 
     def predict(self, x):
         return self.clf.predict(x)
-    
+
     def fit(self,x,y):
         return self.clf.fit(x,y)
-    
+
     def feature_importances(self,x,y):
         print(self.clf.fit(x,y).feature_importances_)
-    
+
 # Class to extend XGboost classifer
 
 # return predicted value of train and mean predicted value of test
@@ -249,7 +249,7 @@ def get_oof(clf, x_train, y_train, x_test):
 rf_params = {
     'n_jobs': -1,
     'n_estimators': 500,
-     'warm_start': True, 
+     'warm_start': True,
      #'max_features': 0.2,
     'max_depth': 6,
     'min_samples_leaf': 2,
@@ -278,7 +278,7 @@ gb_params = {
     'min_samples_leaf': 2,
     'verbose': 0
 }
-# Support Vector Classifier parameters 
+# Support Vector Classifier parameters
 svc_params = {
     'kernel' : 'linear',
     'C' : 0.025
@@ -302,14 +302,14 @@ x_test = test.values # Creats an array of the test data
 #%%
     # Output of the First level Predictions
 
-# We now feed the training and test data into our 5 base classifiers and 
-# use the Out-of-Fold prediction function we defined earlier to generate 
+# We now feed the training and test data into our 5 base classifiers and
+# use the Out-of-Fold prediction function we defined earlier to generate
 # our first level predictions
 
 # Create our OOF train and test predictions. These base results will be used as new features
 et_oof_train, et_oof_test = get_oof(et, x_train, y_train, x_test) # Extra Trees
 rf_oof_train, rf_oof_test = get_oof(rf,x_train, y_train, x_test) # Random Forest
-ada_oof_train, ada_oof_test = get_oof(ada, x_train, y_train, x_test) # AdaBoost 
+ada_oof_train, ada_oof_test = get_oof(ada, x_train, y_train, x_test) # AdaBoost
 gb_oof_train, gb_oof_test = get_oof(gb,x_train, y_train, x_test) # Gradient Boost
 svc_oof_train, svc_oof_test = get_oof(svc,x_train, y_train, x_test) # Support Vector Classifier
 
@@ -331,7 +331,7 @@ ada_features = [0.028 ,   0.008  ,      0.012   ,     0.05866667,   0.032 ,     
 gb_features = [ 0.06796144 , 0.03889349 , 0.07237845 , 0.02628645 , 0.11194395,  0.04778854
   ,0.05965792 , 0.02774745,  0.07462718,  0.4593142 ,  0.01340093]
 #%%
-# Create a dataframe from the lists containing the feature importance data 
+# Create a dataframe from the lists containing the feature importance data
 # for easy plotting via the Plotly package.
 
 cols = train.columns.values
@@ -344,7 +344,7 @@ feature_dataframe = pd.DataFrame( {'features': cols,
     })
 
 # Interactive feature importances via Plotly scatterplots
-# Scatter plot 
+# Scatter plot
 trace = go.Scatter(
     y = feature_dataframe['Random Forest feature importances'].values,
     x = feature_dataframe['features'].values,
@@ -383,7 +383,7 @@ layout= go.Layout(
 fig = go.Figure(data=data, layout=layout)
 py.iplot(fig,filename='scatter2010')
 
-# Scatter plot 
+# Scatter plot
 trace = go.Scatter(
     y = feature_dataframe['Extra Trees  feature importances'].values,
     x = feature_dataframe['features'].values,
@@ -422,7 +422,7 @@ layout= go.Layout(
 fig = go.Figure(data=data, layout=layout)
 py.iplot(fig,filename='scatter2010')
 
-# Scatter plot 
+# Scatter plot
 trace = go.Scatter(
     y = feature_dataframe['AdaBoost feature importances'].values,
     x = feature_dataframe['features'].values,
@@ -461,7 +461,7 @@ layout= go.Layout(
 fig = go.Figure(data=data, layout=layout)
 py.iplot(fig,filename='scatter2010')
 
-# Scatter plot 
+# Scatter plot
 trace = go.Scatter(
     y = feature_dataframe['Gradient Boost feature importances'].values,
     x = feature_dataframe['features'].values,
@@ -547,10 +547,10 @@ py.iplot(fig, filename='bar-direct-labels')
 
 # First-level output as new features
 # ----------------------------------------------------- #
-# Having now obtained our first-level predictions, one can think of it as 
-# essentially building a new set of features to be used as training data for 
-# the next classifier. As per the code below, we are therefore having as our 
-# new columns the first-level predictions from our earlier classifiers and 
+# Having now obtained our first-level predictions, one can think of it as
+# essentially building a new set of features to be used as training data for
+# the next classifier. As per the code below, we are therefore having as our
+# new columns the first-level predictions from our earlier classifiers and
 # we train the next classifier on this.
 # ----------------------------------------------------- #
 base_predictions_train = pd.DataFrame( {'RandomForest': rf_oof_train.ravel(),
@@ -574,12 +574,12 @@ data = [
 ]
 py.iplot(data, filename='labelled-heatmap')
 
-# There have been quite a few articles and Kaggle competition winner 
-# stories about the merits of having trained models that are more 
+# There have been quite a few articles and Kaggle competition winner
+# stories about the merits of having trained models that are more
 # uncorrelated with one another producing better scores.
-x_train = np.concatenate(( et_oof_train, rf_oof_train, ada_oof_train, 
+x_train = np.concatenate(( et_oof_train, rf_oof_train, ada_oof_train,
                           gb_oof_train, svc_oof_train), axis=1)
-x_test = np.concatenate(( et_oof_test, rf_oof_test, ada_oof_test, 
+x_test = np.concatenate(( et_oof_test, rf_oof_test, ada_oof_test,
                          gb_oof_test, svc_oof_test), axis=1)
 
 
@@ -587,8 +587,8 @@ x_test = np.concatenate(( et_oof_test, rf_oof_test, ada_oof_test,
  # Second level learning model via XGBoost¶
 
 # ---------------------------------------------------------- #
-# Here we choose the eXtremely famous library for boosted tree 
-# learning model, XGBoost. It was built to optimize large-scale 
+# Here we choose the eXtremely famous library for boosted tree
+# learning model, XGBoost. It was built to optimize large-scale
 # boosted tree algorithms
 # ---------------------------------------------------------- #
 gbm = xgb.XGBClassifier(
@@ -597,7 +597,7 @@ gbm = xgb.XGBClassifier(
     max_depth= 4,
     min_child_weight= 2,
     #gamma=1,
-    gamma=0.9,                        
+    gamma=0.9,
     subsample=0.8,
     colsample_bytree=0.8,
     objective= 'binary:logistic',
@@ -608,7 +608,7 @@ predictions = gbm.predict(x_test)
 #%%
 # Producing the Submission file
 
-# Generate Submission File 
+# Generate Submission File
 StackingSubmission = pd.DataFrame({ 'PassengerId': PassengerId,
                             'Survived': predictions })
 StackingSubmission.to_csv("StackingSubmission.csv", index=False)
@@ -618,9 +618,3 @@ Some additional steps that may be taken to improve one's score could be:
 
 Implementing a good cross-validation strategy in training the models to find optimal parameter values
 Introduce a greater variety of base models for learning. The more uncorrelated the results, the better the final score.
-
-
-
-
-
-

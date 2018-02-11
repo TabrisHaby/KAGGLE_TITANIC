@@ -8,8 +8,8 @@ About Titanic data
 Version 1
 
 
-@author: Haby
-""" 
+@author: Kaggle Kernel
+"""
 import numpy as np
 import pandas as pd
 
@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 import warnings
-warnings.filterwarnings('ignore') 
+warnings.filterwarnings('ignore')
 
 #%%
 # import train and test
@@ -139,7 +139,7 @@ age_title_mapping = {1: "Young Adult", 2: "Student", 3: "Adult", 4: "Baby", 5: "
 for x in range(len(train["AgeGroup"])):
     if train["AgeGroup"][x] == "Unknown":
         train["AgeGroup"][x] = age_title_mapping[train["Title"][x]]
-        
+
 for x in range(len(test["AgeGroup"])):
     if test["AgeGroup"][x] == "Unknown":
         test["AgeGroup"][x] = age_title_mapping[test["Title"][x]]
@@ -178,12 +178,12 @@ test['Embarked'] = test['Embarked'].map(embark_mapping)
 train.head()
 
 #%%
-#fill in missing Fare value in test set based on mean fare for that Pclass 
+#fill in missing Fare value in test set based on mean fare for that Pclass
 for x in range(len(test["Fare"])):
     if pd.isnull(test["Fare"][x]):
         pclass = test["Pclass"][x] #Pclass = 3
         test["Fare"][x] = round(train[train["Pclass"] == pclass]["Fare"].mean(), 4)
-        
+
 #map Fare values into groups of numerical values
 train['FareBand'] = pd.qcut(train['Fare'], 4, labels = [1, 2, 3, 4])
 test['FareBand'] = pd.qcut(test['Fare'], 4, labels = [1, 2, 3, 4])
@@ -192,8 +192,8 @@ test['FareBand'] = pd.qcut(test['Fare'], 4, labels = [1, 2, 3, 4])
 train = train.drop(['Fare'], axis = 1)
 test = test.drop(['Fare'], axis = 1)
 
-train.head()   
-test.head() 
+train.head()
+test.head()
 
 #%%
 # Choose the best model
@@ -325,16 +325,16 @@ print(acc_gbk)
 
 #%%
 models = pd.DataFrame({
-    'Model': ['Support Vector Machines', 'KNN', 'Logistic Regression', 
-              'Random Forest', 'Naive Bayes', 'Perceptron', 'Linear SVC', 
+    'Model': ['Support Vector Machines', 'KNN', 'Logistic Regression',
+              'Random Forest', 'Naive Bayes', 'Perceptron', 'Linear SVC',
               'Decision Tree', 'Stochastic Gradient Descent', 'Gradient Boosting Classifier'],
-    'Score': [acc_svc, acc_knn, acc_logreg, 
+    'Score': [acc_svc, acc_knn, acc_logreg,
               acc_randomforest, acc_gaussian, acc_perceptron,acc_linear_svc, acc_decisiontree,
               acc_sgd, acc_gbk]})
 models.sort_values(by='Score', ascending=False)
 
 #%%
-#set ids as PassengerId and predict survival 
+#set ids as PassengerId and predict survival
 ids = test['PassengerId']
 predictions = rf_cv.predict(test.drop('PassengerId', axis=1))
 

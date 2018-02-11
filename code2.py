@@ -8,7 +8,7 @@ Titanic Data
 Version 2
 
 
-@author: Haby
+@author: https://www.kaggle.com/startupsci/titanic-data-science-solutions
 """
 
 #%%
@@ -42,21 +42,21 @@ train_df.info()
 print('_'*40)
 test_df.info()
 print('_'*40)
-train_df.describe() 
+train_df.describe()
 print('_'*40)
 train_df.describe(include = ['O'])
 
 #%%
-train_df[['Pclass', 'Survived']].groupby(['Pclass'], 
+train_df[['Pclass', 'Survived']].groupby(['Pclass'],
         as_index=True).mean().sort_values(by='Survived', ascending=False)
 #%%
-train_df[["Sex", "Survived"]].groupby(['Sex'], 
+train_df[["Sex", "Survived"]].groupby(['Sex'],
         as_index=False).mean().sort_values(by='Survived', ascending=False)
 #%%
-train_df[["SibSp", "Survived"]].groupby(['SibSp'], 
+train_df[["SibSp", "Survived"]].groupby(['SibSp'],
         as_index=False).mean().sort_values(by='Survived', ascending=False)
 #%%
-train_df[["Parch", "Survived"]].groupby(['Parch'], 
+train_df[["Parch", "Survived"]].groupby(['Parch'],
         as_index=False).mean().sort_values(by='Survived', ascending=False)
 
 #%%
@@ -106,7 +106,7 @@ for dataset in combine:
     dataset['Title'] = dataset['Title'].replace('Mlle', 'Miss')
     dataset['Title'] = dataset['Title'].replace('Ms', 'Miss')
     dataset['Title'] = dataset['Title'].replace('Mme', 'Mrs')
-    
+
 train_df[['Title', 'Survived']].groupby(['Title'], as_index=False).mean()
 
 #%%
@@ -126,7 +126,7 @@ combine = [train_df, test_df]
 train_df.shape, test_df.shape
 
 #%%
-# converting gender to numeric 
+# converting gender to numeric
 for dataset in combine :
     dataset['Sex'] = dataset['Sex'].map({'male' : 1,'female':0}).astype(int)
 train_df.head()
@@ -140,7 +140,7 @@ grid.add_legend()
 
 #%%
 
-# set up a new 2 by 3 matrix to get the median age of differnet 
+# set up a new 2 by 3 matrix to get the median age of differnet
 # Sex/Pclass group
 guess_ages = np.zeros((2,3))
 
@@ -161,7 +161,7 @@ for dataset in combine:
 
 # fill the Na of age with the location of array in guess_ages, the location
 # is made up by the sex(0,1) and pclass(1,2,3) and the position tuple(i,j)
-# is made by the sex and pclass            
+# is made by the sex and pclass
     for i in range(0, 2):
         for j in range(0, 3):
             dataset.loc[ (dataset.Age.isnull()) & (dataset.Sex == i) & (dataset.Pclass == j+1),\
@@ -171,7 +171,7 @@ for dataset in combine:
 train_df.head()
 
 #%%
-# Create ageband 
+# Create ageband
 train_df['AgeBand'] = pd.cut(train_df['Age'],5)
 train_df[['AgeBand','Survived']].groupby('AgeBand').mean()
 
@@ -182,7 +182,7 @@ for dataset in combine :
     dataset.loc[(16 < dataset['Age']) & (dataset['Age'] <= 32),'Age'] = 1
     dataset.loc[(32 < dataset['Age']) & (dataset['Age'] <= 48),'Age'] = 2
     dataset.loc[(48 < dataset['Age']) & (dataset['Age'] <= 64),'Age'] = 3
-    dataset.loc[(dataset['Age'] > 64),'Age'] = 4    
+    dataset.loc[(dataset['Age'] > 64),'Age'] = 4
 
 # drop AgeBand
 train_df = train_df.drop(['AgeBand'],axis = 1)
@@ -201,7 +201,7 @@ train_df[['FamilySize','Survived']].groupby('FamilySize').mean()
 for dataset in combine :
     dataset['IsAlone'] = 0
     dataset.loc[dataset['FamilySize'] == 1,'IsAlone'] = 1
-    
+
 train_df[['IsAlone','Survived']].groupby('IsAlone').mean()
 
 #%%
@@ -252,7 +252,7 @@ for dataset in combine:
 
 train_df = train_df.drop(['FareBand'], axis=1)
 combine = [train_df, test_df]
-    
+
 train_df.head(10)
 
 
@@ -363,12 +363,12 @@ acc_random_forest
 #%%
 
 models = pd.DataFrame({
-    'Model': ['Support Vector Machines', 'KNN', 'Logistic Regression', 
-              'Random Forest', 'Naive Bayes', 'Perceptron', 
-              'Stochastic Gradient Decent', 'Linear SVC', 
+    'Model': ['Support Vector Machines', 'KNN', 'Logistic Regression',
+              'Random Forest', 'Naive Bayes', 'Perceptron',
+              'Stochastic Gradient Decent', 'Linear SVC',
               'Decision Tree'],
-    'Score': [acc_svc, acc_knn, acc_log, 
-              acc_random_forest, acc_gaussian, acc_perceptron, 
+    'Score': [acc_svc, acc_knn, acc_log,
+              acc_random_forest, acc_gaussian, acc_perceptron,
               acc_sgd, acc_linear_svc, acc_decision_tree]})
 models.sort_values(by='Score', ascending=False)
 
@@ -379,4 +379,3 @@ submission = pd.DataFrame({
         "Survived": Y_pred
     })
 # submission.to_csv('../output/submission.csv', index=False)
-    

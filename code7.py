@@ -3,10 +3,12 @@
 Spyder Editor
 
 This is a temporary script file.
+
+@author : Kaggle Kernel
 """
 #%%
 
-import numpy as np 
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -64,7 +66,7 @@ for i in range(0,len(data)) :
     Title.append(data['Name'].iloc[i].split(',')[1].split('.')[0].strip())
 data['Title'] = Title
 
-#%%  
+#%%
 # replace Title
 data['Title'].replace(['Mlle','Mme','Ms','Dr','Major','Lady','the Countess',
     'Jonkheer','Col','Rev','Capt','Sir','Don'],
@@ -225,21 +227,21 @@ print('The Accurary of SVC model is: ', metrics.accuracy_score(y_pred1,y_test))
 svc = svm.SVC(gamma = .1,C = 1,kernel = 'linear')
 svc.fit(x_train,y_train)
 y_pred2 = svc.predict(x_test)
-print('The Accurary of Linear SVC model is: ', 
+print('The Accurary of Linear SVC model is: ',
       metrics.accuracy_score(y_pred2,y_test))
 
 # Logistic Regression¶
 lreg = LogisticRegression()
 lreg.fit(x_train,y_train)
 y_pred3 = lreg.predict(x_test)
-print('The Accurary of Logistic Regression model is: ', 
+print('The Accurary of Logistic Regression model is: ',
       metrics.accuracy_score(y_pred3,y_test))
 
 # Decision Tree
 dtc = DecisionTreeClassifier()
 dtc.fit(x_train,y_train)
 y_pred4 = dtc.predict(x_test)
-print('The Accurary of Decision Tree model is: ', 
+print('The Accurary of Decision Tree model is: ',
       metrics.accuracy_score(y_pred4,y_test))
 
 # K-Nearest Neighbours(KNN)¶
@@ -253,14 +255,14 @@ print('The Accurary of KNN model is: ', metrics.accuracy_score(y_pred5,y_test),
 naiveB = GaussianNB()
 naiveB.fit(x_train,y_train)
 y_pred6 = naiveB.predict(x_test)
-print('The Accurary of Gaussian Naive Bayes model is: ', 
+print('The Accurary of Gaussian Naive Bayes model is: ',
       metrics.accuracy_score(y_pred6,y_test))
 
 # Random Forests
 rf = RandomForestClassifier()
 rf.fit(x_train,y_train)
 y_pred7 = rf.predict(x_test)
-print('The Accurary of Random Forest model is: ', 
+print('The Accurary of Random Forest model is: ',
       metrics.accuracy_score(y_pred7,y_test))
 
 
@@ -364,9 +366,9 @@ print(gd.best_estimator_)
 #%%
 # Voting Classifier
 
-#It is the simplest way of combining predictions from many different simple 
-#machine learning models. It gives an average prediction result based on the 
-#prediction of all the submodels. The submodels or the basemodels are all of 
+#It is the simplest way of combining predictions from many different simple
+#machine learning models. It gives an average prediction result based on the
+#prediction of all the submodels. The submodels or the basemodels are all of
 #diiferent types.
 
 from sklearn.ensemble import VotingClassifier
@@ -377,7 +379,7 @@ ensemble_lin_rbf=VotingClassifier(estimators=[('KNN',KNeighborsClassifier(n_neig
                                               ('DT',DecisionTreeClassifier(random_state=0)),
                                               ('NB',GaussianNB()),
                                               ('svm',svm.SVC(kernel='linear',probability=True))
-                                             ], 
+                                             ],
                        voting='soft').fit(x_train,y_train)
 print('The accuracy for ensembled model is:',ensemble_lin_rbf.score(x_test,y_test))
 cross=cross_val_score(ensemble_lin_rbf,data.drop(['Survived'],axis = 1),y,
@@ -390,9 +392,9 @@ print('The cross validated score is',cross.mean())
 #%%
 # Bagging
 
-#Bagging is a general ensemble method. It works by applying similar 
-#classifiers on small partitions of the dataset and then taking the average 
-#of all the predictions. Due to the averaging,there is reduction in variance. 
+#Bagging is a general ensemble method. It works by applying similar
+#classifiers on small partitions of the dataset and then taking the average
+#of all the predictions. Due to the averaging,there is reduction in variance.
 #Unlike Voting Classifier, Bagging makes use of similar classifiers.
 
 # Bagging KNN
@@ -423,7 +425,7 @@ print('The cross validated score for bagged Decision Tree is:',result.mean())
 #%%
 # Boosting
 
-#Boosting is an ensembling technique which uses sequential learning 
+#Boosting is an ensembling technique which uses sequential learning
 #of classifiers. It is a step by step enhancement of a weak model.
 
 # AdaBoost(Adaptive Boosting)¶
@@ -458,7 +460,7 @@ print('The cross validated score for XGBoost is:',result.mean())
 
 #%%
 
-# We got the highest accuracy for AdaBoost. We will try to increase it 
+# We got the highest accuracy for AdaBoost. We will try to increase it
 # with Hyper-Parameter Tuning
 
 # Hyper-Parameter Tuning for AdaBoost
@@ -495,36 +497,3 @@ model.fit(data.drop(['Survived'],axis = 1),y)
 pd.Series(model.feature_importances_,data.drop(['Survived'].columns).sort_values(ascending=True).plot.barh(width=0.8,ax=ax[1,1],color='#FD0F00')
 ax[1,1].set_title('Feature Importance in XgBoost')
 plt.show()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

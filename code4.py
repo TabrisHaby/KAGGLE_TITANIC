@@ -2,10 +2,10 @@
 """
 Created on Fri Feb  2 18:12:10 2018
 
-Titanic Data 
+Titanic Data
 version 3
 
-@author: Haby
+@author: Kaggle Kernel
 """
 #%%
 # import packages
@@ -86,7 +86,7 @@ sns.distplot(train.Fare,bins = 50)
 
 #%%
     # Age
-    
+
 fig,(ax1,ax2) = plt.subplots(1,2,figsize = (15,4))
 ax1.set_title('Original Age Value')
 ax2.set_title('New Age Value')
@@ -102,11 +102,11 @@ std_age_test       = test["Age"].std()
 count_nan_age_test = test["Age"].isnull().sum()
 
 # generate random numbers between (mean - std) & (mean + std)
-rand_1 = np.random.randint(average_age_titanic - std_age_titanic, 
-                           average_age_titanic + std_age_titanic, 
+rand_1 = np.random.randint(average_age_titanic - std_age_titanic,
+                           average_age_titanic + std_age_titanic,
                            size = count_nan_age_titanic)
 rand_2 = np.random.randint(average_age_test - std_age_test,
-                           average_age_test + std_age_test, 
+                           average_age_test + std_age_test,
                            size = count_nan_age_test)
 
 # plot original Age values
@@ -120,7 +120,7 @@ test["Age"][np.isnan(test["Age"])] = rand_2
 # convert from float to int
 train['Age'] = train['Age'].astype(int)
 test['Age']  = test['Age'].astype(int)
-        
+
 # plot new Age Values
 train['Age'].hist(bins=70, ax=ax2)
 
@@ -145,7 +145,7 @@ test.drop('Cabin',axis = 1,inplace = True)
 #%%
     # # Family
 
-# Instead of having two columns Parch & SibSp, 
+# Instead of having two columns Parch & SibSp,
 # we can have only one column represent if the passenger had any
 # family member aboard or not,
 # Meaning, if having any family member(whether parent, brother, ...etc)
@@ -177,7 +177,7 @@ axis1.set_xticklabels(['With Family','Alone'],rotation = 45)
 
 #%%
     # Sex
-    # As we see, children(age < ~16) on aboard seem to have a high 
+    # As we see, children(age < ~16) on aboard seem to have a high
     # chances for Survival.
     # So, we can classify passengers as males, females, and child
 
@@ -219,7 +219,7 @@ sns.countplot(x='Person', data=train, ax=axis1)
 
 # average of survived for each Person(male, female, or child)
 person_perc = train[["Person", "Survived"]].groupby(['Person'],as_index=False).mean()
-sns.barplot(x='Person', y='Survived', data=person_perc, ax=axis2, 
+sns.barplot(x='Person', y='Survived', data=person_perc, ax=axis2,
             order=['male','female','child'])
 
 train.drop(['Person'],axis=1,inplace=True)
@@ -254,7 +254,7 @@ X_test  = test.drop("PassengerId",axis=1).copy()
 
 #%%
     # Regression
-    
+
     # LogisticRegression
 reg = LogisticRegression()
 reg.fit(X_train,Y_train)
@@ -281,12 +281,3 @@ random_forest.fit(X_train, Y_train)
 Y_pred = random_forest.predict(X_test)
 
 random_forest.score(X_train, Y_train)
-
-
-
-
-
-
-
-
-

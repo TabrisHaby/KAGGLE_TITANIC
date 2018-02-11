@@ -6,7 +6,7 @@ Titanic Data
 Version 6
 https://www.kaggle.com/yassineghouzam/titanic-top-4-with-ensemble-modeling
 
-@author: Haby
+@author: https://www.kaggle.com/yassineghouzam/titanic-top-4-with-ensemble-modeling
 """
 
         # Titanic Top 4% with ensemble modeling
@@ -15,7 +15,7 @@ https://www.kaggle.com/yassineghouzam/titanic-top-4-with-ensemble-modeling
         # ---------------------------------------------- #
         # -------------- Feature analysis -------------- #
         # ---------------------------------------------- #
-        
+
 #%%
 # 1. import Packages and env
 import pandas as pd
@@ -55,14 +55,14 @@ def detect_outliers(df,n,features) :
     to the Tukey method.
     """
     outlier_indices = []
-    
+
     # iterate over features
     for c in features :
         # 25% / 75% quantile
         q1 = np.percentile(df[c],25)
         q3 = np.percentile(df[c],75)
         iqr = q3 - q1
-        
+
         # outliers step
         outlier_step = 1.5*iqr
         # detemeter the list of index of outlier for each col
@@ -70,29 +70,29 @@ def detect_outliers(df,n,features) :
                                ) | (df[c] > q3 + outlier_step )].index
         # append the result to outlier_indices
         outlier_indices.extend(outlier_list_col)
-    
+
     # select obs with more that 2 outliers
     outlier_indices = Counter(outlier_indices) # count the number of each item
     multiple_outliers = list(k for k,v in outlier_indices.items() if v > n)
-    
+
     return multiple_outliers
 
 outlier_to_drop = detect_outliers(train,2,['Age','SibSp','Parch','Fare'])
 
 #%%
-train.loc[outlier_to_drop]   
-train.drop(outlier_to_drop,axis = 0,inplace = True  )    
+train.loc[outlier_to_drop]
+train.drop(outlier_to_drop,axis = 0,inplace = True  )
 
 #%%
 # 2.3 joining train and test set
-dataset =  pd.concat(objs=[train, test], axis=0).reset_index(drop=True)    
+dataset =  pd.concat(objs=[train, test], axis=0).reset_index(drop=True)
 train_len = len(train)
 
 #%%
-# 2.4 Check for NAs 
+# 2.4 Check for NAs
 dataset = dataset.fillna(np.nan)
 dataset.isnull().sum()
- 
+
 # Infos
 train.info()
 train.describe()
@@ -100,52 +100,52 @@ train.describe()
 #%%
 # 3.1 Numerical values
 
-# Correlation matrix between numerical values (SibSp Parch Age and Fare values) and Survived 
+# Correlation matrix between numerical values (SibSp Parch Age and Fare values) and Survived
 sns.heatmap(train[['Survived','SibSp','Parch','Age','Fare']].corr(),
-            annot=True,fmt = '.3f') 
-# Only Fare feature seems to have a significative correlation with the survival probability.   
+            annot=True,fmt = '.3f')
+# Only Fare feature seems to have a significative correlation with the survival probability.
 
 #%%
 # Explore other Numeric variables
 
 # SibSp
-f = sns.barplot(x = 'SibSp',y = 'Survived',data = train )    
-f.set(ylabel = 'Survived Rate')    
-# It seems that passengers having a lot of siblings/spouses have less chance 
+f = sns.barplot(x = 'SibSp',y = 'Survived',data = train )
+f.set(ylabel = 'Survived Rate')
+# It seems that passengers having a lot of siblings/spouses have less chance
 # to survive.
 
-# Single passengers (0 SibSP) or with two other persons (SibSP 1 or 2) have 
+# Single passengers (0 SibSP) or with two other persons (SibSP 1 or 2) have
 # more chance to survive
 
 #%%
-# Parch    
+# Parch
 f = sns.barplot(x = 'Parch',y = 'Survived',data = train)
-f.set(ylabel = 'Survived Rate')  
-# Small families have more chance to survive, more than single (Parch 0), 
-# medium (Parch 3,4) and large families (Parch 5,6 ).  
+f.set(ylabel = 'Survived Rate')
+# Small families have more chance to survive, more than single (Parch 0),
+# medium (Parch 3,4) and large families (Parch 5,6 ).
 
 #%%
 # Age vs Survived
 g = sns.FacetGrid(col = 'Survived',data = train)
-g.map(sns.distplot,'Age')  
+g.map(sns.distplot,'Age')
 
 #%%
 # Explore Age distribution
 temp = train[train.Age.notnull()][['Age','Survived']]
 g = sns.kdeplot(temp[temp['Survived'] == 1]['Age'],shade = True,color = 'c')
-g = sns.kdeplot(temp[temp['Survived'] == 0]['Age'],shade = True,color = 'r')    
+g = sns.kdeplot(temp[temp['Survived'] == 0]['Age'],shade = True,color = 'r')
 g.legend(['Survived','Not Survived'])
-# When we superimpose the two densities , we cleary see a peak correponsing 
-# (between 0 and 5) to babies and very young childrens.    
-    
+# When we superimpose the two densities , we cleary see a peak correponsing
+# (between 0 and 5) to babies and very young childrens.
+
 #%%
 # Fare
 
 # imputation with median
-dataset['Fare'] = dataset.Fare.fillna(dataset['Fare'].median()) 
-# plot Fare  
-sns.kdeplot(dataset['Fare'],color = 'c')  
-    
+dataset['Fare'] = dataset.Fare.fillna(dataset['Fare'].median())
+# plot Fare
+sns.kdeplot(dataset['Fare'],color = 'c')
+
 # It is better to transform it with the log function to reduce this skew.
 # Apply log to Fare to reduce skewness distribution
 dataset["Fare"] = dataset["Fare"].map(lambda i: np.log(i) if i > 0 else 0)
@@ -163,38 +163,38 @@ sns.barplot(x = 'Sex',y = 'Survived',data = train)
 
 # survived rate for male / female
 train[['Sex','Survived']].groupby('Sex').mean()
-    
+
 # Pclass
-sns.barplot(x = 'Pclass',y = 'Survived',data = train,hue = 'Sex')  
-train[['Pclass','Survived']].groupby('Pclass').mean()  
-  
+sns.barplot(x = 'Pclass',y = 'Survived',data = train,hue = 'Sex')
+train[['Pclass','Survived']].groupby('Pclass').mean()
+
 # Embarked
-dataset['Embarked'] = dataset['Embarked'].fillna('S')   
-#%% 
+dataset['Embarked'] = dataset['Embarked'].fillna('S')
+#%%
 # plot
 f,ax = plt.subplots(1,3,figsize = (10,5))
 sns.barplot(x = 'Embarked', y = 'Survived',data = train,ax = ax[0])
-sns.barplot(x = 'Embarked',y = 'Survived',data = train,hue = 'Pclass',ax = ax[1])        
-sns.barplot(x = 'Embarked',y = 'Survived',data = train,hue = 'Sex',ax = ax[2    ])        
+sns.barplot(x = 'Embarked',y = 'Survived',data = train,hue = 'Pclass',ax = ax[1])
+sns.barplot(x = 'Embarked',y = 'Survived',data = train,hue = 'Sex',ax = ax[2    ])
 
 #%%
-# 4 filling missing values  
-      
-# 4.1 Age   
+# 4 filling missing values
+
+# 4.1 Age
 _,ax = plt.subplots(1,4)
-sns.boxplot(x = 'Sex',y = 'Age',data = train,ax = ax[0])     
-sns.boxplot(x = 'Sex',y = 'Age',hue = 'Pclass',data = train,ax = ax[1]) 
+sns.boxplot(x = 'Sex',y = 'Age',data = train,ax = ax[0])
+sns.boxplot(x = 'Sex',y = 'Age',hue = 'Pclass',data = train,ax = ax[1])
 sns.boxplot(x = 'Parch',y = 'Age',data = train,ax = ax[2])
-sns.boxplot(x = 'SibSp',y = 'Age',data = train,ax = ax[3])       
-        
-# Age distribution seems to be the same in Male and Female subpopulations, 
+sns.boxplot(x = 'SibSp',y = 'Age',data = train,ax = ax[3])
+
+# Age distribution seems to be the same in Male and Female subpopulations,
 # so Sex is not informative to predict Age.
 
-# However, 1rst class passengers are older than 2nd class passengers who 
+# However, 1rst class passengers are older than 2nd class passengers who
 # are also older than 3rd class passengers.
 
-# Moreover, the more a passenger has parents/children the older he is 
-# and the more a passenger has siblings/spouses the younger he is.        
+# Moreover, the more a passenger has parents/children the older he is
+# and the more a passenger has siblings/spouses the younger he is.
 
 #%%
 # convert sex tp 1 / 0 and plot
@@ -203,10 +203,10 @@ sns.heatmap(dataset[['Age','SibSp','Parch','Sex','Pclass']].corr(),
             annot = True)
 # sex is not related with age
 # use SibSP, Parch and Pclass in order to impute the missing ages.
-# fill Age with the median age of similar rows of Pclass, Parch and SibSp.       
+# fill Age with the median age of similar rows of Pclass, Parch and SibSp.
 
 # findall nan index of Age
-index_age_nan = list(dataset[dataset['Age'].isnull()].index)     
+index_age_nan = list(dataset[dataset['Age'].isnull()].index)
 
 for i in index_age_nan :
     age_med = dataset['Age'].median()
@@ -226,7 +226,7 @@ for i in index_age_nan :
 #    if not np.isnan(age_pred) :
 #        dataset.iloc[i]['Age'] = age_pred
 #    else :
-#        dataset.iloc[i]['Age'] = age_med  
+#        dataset.iloc[i]['Age'] = age_med
 ---- > 不成立,先定位index后提供column时候，定位点在index，而不再column，
 ---- > 因此无法赋值
 
@@ -237,43 +237,43 @@ for i in index_age_nan :
         # ---------------------------------------------- #
         # ------------ Feature engineering ------------- #
         # ---------------------------------------------- #
-        
+
 # 5.1 Name/ Title
 dataset['Title'] = [i.split(',')[1].split('.')[0].strip() for i in dataset['Name']]
 
 # plot
-sns.countplot(dataset['Title'])       
+sns.countplot(dataset['Title'])
 
 # group into 4
 dataset['Title'] = dataset['Title'].replace(['Lady', 'the Countess',
-       'Countess','Capt', 'Col','Don', 'Dr', 'Major', 'Rev', 
-       'Sir', 'Jonkheer', 'Dona'],'Rare')        
-dataset["Title"] = dataset["Title"].map({"Master":0, "Miss":1, "Ms" : 1 , 
+       'Countess','Capt', 'Col','Don', 'Dr', 'Major', 'Rev',
+       'Sir', 'Jonkheer', 'Dona'],'Rare')
+dataset["Title"] = dataset["Title"].map({"Master":0, "Miss":1, "Ms" : 1 ,
        "Mme":1, "Mlle":1, "Mrs":1, "Mr":2, "Rare":3})
-dataset["Title"] = dataset["Title"].astype(int)   
+dataset["Title"] = dataset["Title"].astype(int)
 
 # plot again
-sns.countplot(dataset['Title'])  
-sns.barplot(x = 'Title',y = 'Survived',data = dataset)   
-        
+sns.countplot(dataset['Title'])
+sns.barplot(x = 'Title',y = 'Survived',data = dataset)
+
 # Drop Name variable
-dataset.drop(labels = ["Name"], axis = 1, inplace = True)        
-        
+dataset.drop(labels = ["Name"], axis = 1, inplace = True)
+
 #%%
 # 5.2 Family Size
 dataset['FamilySize'] = dataset['Parch'] + dataset['SibSp'] + 1
 
 # plot
-sns.barplot(x = 'FamilySize',y = 'Survived',data =dataset) 
+sns.barplot(x = 'FamilySize',y = 'Survived',data =dataset)
 sns.countplot(dataset['FamilySize'])
 
 # group into 4 : single / couples / medfamily / largefamily
-dataset['Single'] = dataset['FamilySize'].map(lambda x : 1 if x == 1 else 0) 
-dataset['Couple'] = dataset['FamilySize'].map(lambda x : 1 if x == 2 else 0)      
-dataset['MedF'] = dataset['FamilySize'].map(lambda x : 1 if 3<= x <= 4 else 0)      
-dataset['LarF'] = dataset['FamilySize'].map(lambda x : 1 if x >= 5 else 0)  
+dataset['Single'] = dataset['FamilySize'].map(lambda x : 1 if x == 1 else 0)
+dataset['Couple'] = dataset['FamilySize'].map(lambda x : 1 if x == 2 else 0)
+dataset['MedF'] = dataset['FamilySize'].map(lambda x : 1 if 3<= x <= 4 else 0)
+dataset['LarF'] = dataset['FamilySize'].map(lambda x : 1 if x >= 5 else 0)
 
-# plot  
+# plot
 _,ax = plt.subplots(1,4)
 sns.barplot(x = 'Single',y = 'Survived',data = dataset,ax = ax[0])
 sns.barplot(x = 'Couple',y = 'Survived',data = dataset,ax = ax[1])
@@ -281,17 +281,17 @@ sns.barplot(x = 'MedF',y = 'Survived',data = dataset,ax = ax[2])
 sns.barplot(x = 'LarF',y = 'Survived',data = dataset,ax = ax[3])
 # Factorplots of family size categories show that Small and Medium families
 # have more chance to survive than single passenger and large families.
-    
+
 #%%
 # get dummy for title and embark
 dataset = pd.get_dummies(dataset,columns = ['Title'])
 dataset = pd.get_dummies(dataset,columns = ['Embarked'],prefix = 'Em')
-        
+
 #%%
 # 5.3 Cabin
 
 # check data
-set(dataset.Cabin) 
+set(dataset.Cabin)
 
 # fill nan with X
 dataset['Cabin'] = dataset['Cabin'].fillna('X')
@@ -310,7 +310,7 @@ dataset.Cabin.apply(len).value_counts()
 # Capital Cabin except length with 5
 dataset['Cabin'] = dataset['Cabin'].map(lambda x : x[0] if len(x) != 5 else x)
 
-# for length = 5, they have Cabin with E,F and G 
+# for length = 5, they have Cabin with E,F and G
 # id = 129, i set cabin = E based on Fare and Sex
 # id = 1180,1213 set cabin = F
 
@@ -337,11 +337,11 @@ for i in dataset.Ticket :
         t.append(i[:1])
     else :
         t.append(i.replace('.','').replace('/','').split()[0].upper())
-# add to dataset   
+# add to dataset
 dataset['Ticket'] = t
 
 # group
-for i in dataset.index :   
+for i in dataset.index :
     if dataset['Ticket'].iloc[i] in ['STONO','STONO2','STONOQ','SOTONO2'] :
         dataset['Ticket'].iloc[i] = 'SOTONOQ'
     elif dataset['Ticket'].iloc[i] in ['SCAH','SC','SCA4','SCA3','SCOW'] :
@@ -351,7 +351,7 @@ for i in dataset.index :
               'AQ3','LP','SOP','A','CASOTON','AS','SP','AQ4'] :
         dataset['Ticket'].iloc[i] = 'RARE'
 # result
-dataset.Ticket.value_counts()       
+dataset.Ticket.value_counts()
 # dummy
 dataset = pd.get_dummies(dataset, columns = ["Ticket"], prefix="T")
 
@@ -361,29 +361,29 @@ dataset = pd.get_dummies(dataset, columns = ["Ticket"], prefix="T")
 dataset["Pclass"] = dataset["Pclass"].astype("category")
 dataset = pd.get_dummies(dataset, columns = ["Pclass"],prefix="Pc")
 
-# Drop useless variables 
+# Drop useless variables
 dataset.drop(labels = ["PassengerId"], axis = 1, inplace = True)
 
 #%%
 dataset.shape
 
-#%%               
+#%%
         # ---------------------------------------------- #
         # ------------------ Modeling ------------------ #
         # ---------------------------------------------- #
-        
+
 ## Separate train dataset and test dataset
 
 train = dataset[:train_len]
 test = dataset[train_len:]
 test.drop(labels=["Survived"],axis = 1,inplace=True)
 
-## Separate train features and label 
+## Separate train features and label
 
 train["Survived"] = train["Survived"].astype(int)
 Y_train = train["Survived"]
-X_train = train.drop(labels = ["Survived"],axis = 1)        
-        
+X_train = train.drop(labels = ["Survived"],axis = 1)
+
 #%%
 # 6.1 Simple Model
 
@@ -405,7 +405,7 @@ X_train = train.drop(labels = ["Survived"],axis = 1)
 # Cross validate model with Kfold stratified cross val
 kfold = StratifiedKFold(n_splits=10)
 
-# Modeling step Test differents algorithms 
+# Modeling step Test differents algorithms
 random_state = 2
 classifiers = []
 classifiers.append(SVC(random_state=random_state))
@@ -421,10 +421,10 @@ classifiers.append(LinearDiscriminantAnalysis())
 
 cv_results = []
 for classifier in classifiers :
-    cv_results.append(cross_val_score(classifier, X_train, 
-                                      y = Y_train, scoring = "accuracy", 
+    cv_results.append(cross_val_score(classifier, X_train,
+                                      y = Y_train, scoring = "accuracy",
                                       cv = kfold, n_jobs=-1))
-    
+
 cv_means = []
 cv_std = []
 for cv_result in cv_results:
@@ -436,19 +436,19 @@ cv_res = pd.DataFrame({"CrossValMeans":cv_means,"CrossValerrors": cv_std,
 "RandomForest","ExtraTrees","GradientBoosting","MultipleLayerPerceptron",
 "KNeighboors","LogisticRegression","LinearDiscriminantAnalysis"]})
 
-g = sns.barplot("CrossValMeans","Algorithm",data = cv_res, 
+g = sns.barplot("CrossValMeans","Algorithm",data = cv_res,
                 palette="Set3",orient = "h",**{'xerr':cv_std})
 g.set_xlabel("Mean Accuracy")
 g = g.set_title("Cross validation scores")
 
-# I decided to choose the SVC, AdaBoost, RandomForest , ExtraTrees and 
+# I decided to choose the SVC, AdaBoost, RandomForest , ExtraTrees and
 # the GradientBoosting classifiers for the ensemble modeling.
 
-#%%        
-# 6.1.2 Hyperparameter tunning for best model  
- 
-# grid search optimization for AdaBoost, ExtraTrees , RandomForest, 
-# GradientBoosting and SVC classifiers.    
+#%%
+# 6.1.2 Hyperparameter tunning for best model
+
+# grid search optimization for AdaBoost, ExtraTrees , RandomForest,
+# GradientBoosting and SVC classifiers.
 
 #%%
 # Adaboost
@@ -460,7 +460,7 @@ ada_param_grid = {"base_estimator__criterion" : ["gini", "entropy"],
               "n_estimators" :[1,2],
               "learning_rate":  [0.0001, 0.001, 0.01, 0.1, 0.2, 0.3,1.5]}
 
-gsadaDTC = GridSearchCV(adaDTC,param_grid = ada_param_grid, 
+gsadaDTC = GridSearchCV(adaDTC,param_grid = ada_param_grid,
                         cv=kfold, scoring="accuracy", n_jobs= 4, verbose = 1)
 
 gsadaDTC.fit(X_train,Y_train)
@@ -470,7 +470,7 @@ print(gsadaDTC.best_score_)
 # 0.82406356413166859
 
 #%%
-#ExtraTrees 
+#ExtraTrees
 ExtC = ExtraTreesClassifier()
 
 
@@ -495,7 +495,7 @@ gsExtC.best_score_
 # 0.82973893303064694
 
 #%%
- RFC Parameters tunning 
+ RFC Parameters tunning
 RFC = RandomForestClassifier()
 
 
@@ -528,7 +528,7 @@ gb_param_grid = {'loss' : ["deviance"],
               'learning_rate': [0.1, 0.05, 0.01],
               'max_depth': [4, 8],
               'min_samples_leaf': [100,150],
-              'max_features': [0.3, 0.1] 
+              'max_features': [0.3, 0.1]
               }
 
 gsGBC = GridSearchCV(GBC,param_grid = gb_param_grid, cv=kfold, scoring="accuracy", n_jobs= 4, verbose = 1)
@@ -544,7 +544,7 @@ gsGBC.best_score_
 #%%
 ### SVC classifier
 SVMC = SVC(probability=True)
-svc_param_grid = {'kernel': ['rbf'], 
+svc_param_grid = {'kernel': ['rbf'],
                   'gamma': [ 0.001, 0.01, 0.1, 1],
                   'C': [1, 10, 50, 100,200,300, 1000]}
 
@@ -594,7 +594,7 @@ g = plot_learning_curve(gsExtC.best_estimator_,"ExtraTrees learning curves",X_tr
 g = plot_learning_curve(gsSVMC.best_estimator_,"SVC learning curves",X_train,Y_train,cv=kfold)
 g = plot_learning_curve(gsadaDTC.best_estimator_,"AdaBoost learning curves",X_train,Y_train,cv=kfold)
 g = plot_learning_curve(gsGBC.best_estimator_,"GradientBoosting learning curves",X_train,Y_train,cv=kfold)
-        
+
 #%%
 # 6.1.4 Feature importance of tree based classifiers¶
 
@@ -614,8 +614,8 @@ for row in range(nrows):
         g.set_ylabel("Features",fontsize=12)
         g.tick_params(labelsize=9)
         g.set_title(name + " feature importance")
-        nclassifier += 1       
-        
+        nclassifier += 1
+
 #%%
 test_Survived_RFC = pd.Series(RFC_best.predict(test), name="RFC")
 test_Survived_ExtC = pd.Series(ExtC_best.predict(test), name="ExtC")
@@ -639,27 +639,10 @@ votingC = votingC.fit(X_train, Y_train)
 
 #%%
 # 6.3 Prediction
-# 6.3.1 Predict and Submit results    
+# 6.3.1 Predict and Submit results
 
 test_Survived = pd.Series(votingC.predict(test), name="Survived")
 
 results = pd.concat([IDtest,test_Survived],axis=1)
 
 results.to_csv("ensemble_python_voting.csv",index=False)
-
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        

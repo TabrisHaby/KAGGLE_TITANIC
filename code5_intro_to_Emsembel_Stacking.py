@@ -317,10 +317,10 @@ print("Training is complete")
 
 #%%
 # Feature importances generated from the different classifiers
-rf_features = rf.feature_importances(x_train,y_train)
-et_features = et.feature_importances(x_train, y_train)
-ada_features = ada.feature_importances(x_train, y_train)
-gb_features = gb.feature_importances(x_train,y_train)
+#rf_features = rf.feature_importances(x_train,y_train)
+#et_features = et.feature_importances(x_train, y_train)
+#ada_features = ada.feature_importances(x_train, y_train)
+#gb_features = gb.feature_importances(x_train,y_train)
 
 rf_features = [0.10474135,  0.21837029,  0.04432652,  0.02249159,  0.05432591,  0.02854371
   ,0.07570305,  0.01088129 , 0.24247496,  0.13685733 , 0.06128402]
@@ -614,7 +614,7 @@ StackingSubmission = pd.DataFrame({ 'PassengerId': PassengerId,
 StackingSubmission.to_csv("StackingSubmission.csv", index=False)
 
 #%%
-Some additional steps that may be taken to improve one's score could be:
-
-Implementing a good cross-validation strategy in training the models to find optimal parameter values
-Introduce a greater variety of base models for learning. The more uncorrelated the results, the better the final score.
+#Some additional steps that may be taken to improve one's score could be:
+#
+#Implementing a good cross-validation strategy in training the models to find optimal parameter values
+#Introduce a greater variety of base models for learning. The more uncorrelated the results, the better the final score.
